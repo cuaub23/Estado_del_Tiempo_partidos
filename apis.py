@@ -14,15 +14,10 @@ def obtener_partidos_proxima_semana(db_path="partidos.db"):
     hoy = date.today()
     semana_despues = hoy + timedelta(days=7)
     
-    # El uso del bloque 'with' (context manager) garantiza que la conexión
-    # a la base de datos se cierre automáticamente, incluso si ocurre un error.
     with sqlite3.connect(db_path) as con:
         con.row_factory = sqlite3.Row
         cur = con.cursor()
         
-        # PRECAUCIÓN: Nunca uses f-strings para inyectar variables en SQL.
-        # Utiliza parámetros (?) para evitar ataques de inyección SQL y 
-        # dejar que SQLite maneje el formato de manera segura.
         sql_query = f""" 
             SELECT partido, estadio, lat, log, fecha_hora
             FROM partidos
