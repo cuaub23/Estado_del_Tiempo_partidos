@@ -46,14 +46,11 @@ def obtener_clima_partido(lat, lon, hora_partido):
     }
 
     try:
-        # Añadimos un timeout. Si la API se cae, tu programa no se quedará colgado para siempre.
         response = requests.get(url, params=params, timeout=10)
-        response.raise_for_status()  # Lanza una excepción si el código no es 200 (ej. 404, 500)
+        response.raise_for_status() 
         
         data = response.json()
         
-        # El uso de .index() es peligroso si la API cambia su formato de fecha/hora.
-        # Lo protegemos capturando el ValueError.
         indice = data["hourly"]["time"].index(hora_partido)
         temp = data["hourly"]["temperature_2m"][indice]
         humedad = data["hourly"]["relative_humidity_2m"][indice]
@@ -75,7 +72,7 @@ if __name__ == "__main__":
     # 1. Extraemos los partidos de la base de datos
     partidos = obtener_partidos_proxima_semana("partidos.db")
 
-    # 2. Iteramos para enriquecer los datos con el clima
+    # 2. Iteramos para obtener los datos con el clima
     for partido in partidos:
         hora_partido = partido["fecha_hora"]
         part = partido["partido"]
